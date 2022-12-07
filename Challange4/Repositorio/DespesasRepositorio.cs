@@ -2,6 +2,7 @@
 using Challange4.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
 
 namespace Challange4.Repositorio
 {
@@ -104,6 +105,20 @@ namespace Challange4.Repositorio
             _context.Remove(despesa);
             await _context.SaveChangesAsync();
             return despesa;
+        }
+
+        public async Task<List<Despesas>> GetPerDescription(string description)
+        {
+            var descri = (await GetAllAsync()).Where(x => x.Descricao.Contains(description)).ToList();
+
+            return descri;
+        }
+
+        public async Task<IEnumerable> GetPerMonth(string Years, string Month)
+        {
+            var Data = (await GetAllAsync()).
+                Where(x => x.Data.ToString("yyyy/MM") == $"{Years}/{Month}").ToList();
+            return (Data);
         }
     }
 }

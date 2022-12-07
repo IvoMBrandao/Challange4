@@ -1,9 +1,10 @@
 ﻿using Challange4.Data;
 using Challange4.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
-
-
+using NuGet.Protocol;
+using System.Collections;
 
 namespace Challange4.Repositorio
 {
@@ -18,10 +19,9 @@ namespace Challange4.Repositorio
 
         }
 
-        public async Task<List<Receitas>> GetAllAsync()
-        {
-            return (await _context.Receitas.ToListAsync());
-
+        public async Task<List<Receitas>> GetAllAsync( )
+        {      
+            return await _context.Receitas.ToListAsync();
         }
 
         public async Task<Receitas> GetPerIdAsync(int id)
@@ -105,18 +105,37 @@ namespace Challange4.Repositorio
             await _context.SaveChangesAsync();
             return receita;
         }
+
+        public async Task<List<Receitas>> GetPerDescription(string description)
+        {
+           
+                var desc = (await GetAllAsync()).
+                Where(x => x.Descricao.Contains(description)).ToList();
+
+                return desc;
+            
+         
+        }
+
+        public async Task<IEnumerable> GetPerMonth(string Years , string Month)
+        {
+            var Data = (await GetAllAsync()).
+                Where(x => x.Data.ToString("yyyy/MM") == $"{Years}/{Month}").ToList();
+            return (Data);
+        }
     }
 
 
 
-
+    
 
 }
 
-//public async Task<ActionResult<Receitas>> GetDescricaoAsync(string descri)
+
+//public async Task<Receitas> GetDescricaoAsync(string descri)
 //{
 //    var descricao = (await GetAllAsync()).
 //        Where(x => x.Descricao.Equals(descri)).ToList();
 
-//      return descri == null ? NotFound(): Ok(descri);
+//    return descri == null ? NotFound() : Ok(descri);
 //}

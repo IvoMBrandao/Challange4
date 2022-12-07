@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Challange4.Models;
 using Challange4.Repositorio;
-
+using System.Collections;
 
 namespace Challange4.Controllers
 {
@@ -22,10 +22,30 @@ namespace Challange4.Controllers
 
         [HttpGet]
 
-        public async Task<List<Receitas>> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync(string? descricao)
         {
-            var receitas = await _Icontext.GetAllAsync();
-            return receitas;
+            try
+            {
+                if (descricao != null)
+                {
+                    var desc = (await _Icontext.GetPerDescription(descricao));
+                    return Ok(desc);
+
+
+                }
+
+                return Ok(await _Icontext.GetAllAsync());
+
+            }
+
+            catch
+            {
+                return StatusCode(500);
+            }
+
+
+
+
         }
 
 
@@ -41,7 +61,13 @@ namespace Challange4.Controllers
              return Ok(receitas);
         }
 
-       
+        [HttpGet("{Years}/{Month}")]
+
+        public async Task<IEnumerable> GetPerMonth(string Years , string Month )
+        {
+            var Data = _Icontext.GetPerMonth(Years, Month);
+            return await Data;
+        }
 
         [HttpPost]
         public async Task<IActionResult> PostAsync(Receitas receitas)

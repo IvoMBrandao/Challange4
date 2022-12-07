@@ -1,5 +1,6 @@
 ﻿using Challange4.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections;
 
 namespace Challange4.Repositorio
 {
@@ -10,5 +11,7 @@ namespace Challange4.Repositorio
         Task<IActionResult> PostAsync(Receitas receitas);
         Task<IActionResult> PutAsync(Receitas receita,int id);
         Task<Receitas> DeleteAsync(int id);
+        Task<List<Receitas>> GetPerDescription(string description);
+        Task<IEnumerable> GetPerMonth(string Years , string Month );
     }
 }
