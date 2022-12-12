@@ -19,7 +19,7 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 {
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
-
+builder.Services.AddScoped<IResumoRepositorio, ResumoRepositoio>();
 builder.Services.AddScoped<IReceitasRepositorio, ReceitasRepositorio>();
 builder.Services.AddScoped<IDespesasRepositorio, DespesasRepositorio>();
 

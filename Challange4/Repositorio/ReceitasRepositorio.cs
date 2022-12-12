@@ -66,7 +66,7 @@ namespace Challange4.Repositorio
 
         public async Task<IActionResult> PutAsync([FromBody] Receitas receita, int id)
         {
-            Receitas receitas = await GetPerIdAsync(id);// arrumar pois não aceitas upcast
+            Receitas receitas = await GetPerIdAsync(id);
 
             if (receitas == null)
             {
@@ -131,11 +131,3 @@ namespace Challange4.Repositorio
 
 }
 
-
-//public async Task<Receitas> GetDescricaoAsync(string descri)
-//{
-//    var descricao = (await GetAllAsync()).
-//        Where(x => x.Descricao.Equals(descri)).ToList();
-
-//    return descri == null ? NotFound() : Ok(descri);
-//}
