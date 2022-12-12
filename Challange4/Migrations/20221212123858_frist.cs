@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Challange4.Migrations
 {
     /// <inheritdoc />
-    public partial class Frist : Migration
+    public partial class frist : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,6 +20,7 @@ namespace Challange4.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Descricao = table.Column<string>(type: "text", nullable: false),
                     Valor = table.Column<double>(type: "double precision", nullable: false),
+                    Categorias = table.Column<int>(type: "integer", nullable: false),
                     Data = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>

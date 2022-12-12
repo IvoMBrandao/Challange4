@@ -30,6 +30,9 @@ namespace Challange4.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("Categorias")
+                        .HasColumnType("integer");
+
                     b.Property<DateTime>("Data")
                         .HasColumnType("timestamp with time zone");
 

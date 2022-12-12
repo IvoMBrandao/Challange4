@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Challange4.Migrations
 {
     [DbContext(typeof(FinancaContext))]
-    [Migration("20221205151918_Frist")]
-    partial class Frist
+    [Migration("20221212123858_frist")]
+    partial class frist
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,6 +32,9 @@ namespace Challange4.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Categorias")
+                        .HasColumnType("integer");
 
                     b.Property<DateTime>("Data")
                         .HasColumnType("timestamp with time zone");
