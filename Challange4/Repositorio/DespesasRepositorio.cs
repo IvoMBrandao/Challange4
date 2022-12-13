@@ -18,13 +18,13 @@ namespace Challange4.Repositorio
 
         public async Task<List<Despesas>> GetAllAsync()
         {
-            return (await _context.Despesas.ToListAsync());
+            return await _context.Despesas.ToListAsync();
 
         }
 
         public async Task<Despesas> GetPerIdAsync(int id)
         {
-            return await _context.Despesas.FirstOrDefaultAsync(Despesas => Despesas.Id == id);
+            return  await _context.Despesas.FirstOrDefaultAsync(Despesas => Despesas.Id == id);
         }
 
 
@@ -65,9 +65,9 @@ namespace Challange4.Repositorio
         public async Task<IActionResult> PutAsync([FromBody] Despesas despesa, int id)
         {
             Despesas despesas = await GetPerIdAsync(id);
-
             var Verificar = (await GetAllAsync()).Where(x =>
              CheckDescriptionSameMonth(
+
 
                  x.Descricao,
                  despesas.Descricao,
@@ -78,7 +78,7 @@ namespace Challange4.Repositorio
 
             if (despesas == null)
             {
-                throw new Exception($"Usuario para o ID:{id} não foi encontrado ");
+                return BadRequest($"Usuario para o ID:{id} não foi encontrado ");
             }
 
             if (Verificar != null)

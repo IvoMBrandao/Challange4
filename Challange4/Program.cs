@@ -1,17 +1,16 @@
 using Challange4.Data;
 using Challange4.Repositorio;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 
-builder.Services.AddEntityFrameworkNpgsql().// qualquer coisa tirar AddEntityFrameworkNpgsql()
+builder.Services.AddEntityFrameworkNpgsql().
     AddDbContext<FinancaContext>(x => x.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 

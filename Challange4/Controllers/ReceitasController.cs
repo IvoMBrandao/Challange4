@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Challange4.Models;
 using Challange4.Repositorio;
 using System.Collections;
+using Challange4.Data.Dtos;
+using AutoMapper;
+using NuGet.Protocol.Plugins;
+using System.Net;
 
 namespace Challange4.Controllers
 {
@@ -10,12 +14,13 @@ namespace Challange4.Controllers
     [Route("Receitas")]
     public class ReceitasController : ControllerBase
     {
-        
-        private readonly IReceitasRepositorio _Icontext;
 
-        public ReceitasController(  IReceitasRepositorio icontext)
+        private readonly IReceitasRepositorio _Icontext;
+        private readonly IMapper _mapper;
+
+        public ReceitasController(IReceitasRepositorio icontext,IMapper mapper)
         {
-           
+            _mapper=mapper; 
             _Icontext = icontext;
         }
 
@@ -26,23 +31,28 @@ namespace Challange4.Controllers
         {
             try
             {
+
+
+
                 if (descricao != null)
                 {
                     var desc = (await _Icontext.GetPerDescription(descricao));
-                    return Ok(desc);
+
+                    return desc;
 
 
                 }
 
                 return Ok(await _Icontext.GetAllAsync());
-
             }
 
-            catch
+            catch (Exception)
             {
                 return StatusCode(500);
             }
+    
 
+           
 
 
 
@@ -52,58 +62,104 @@ namespace Challange4.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPerIdAsync(int id)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                BadRequest("Modelo inválido. Não é permitido campos em branco.");
-            }
 
-            var receitas= await _Icontext.GetPerIdAsync(id);
-             return Ok(receitas);
-        }
+                if (!ModelState.IsValid)
+                {
+                    BadRequest("Modelo inválido. Não é permitido campos em branco.");
+                }
+
+                var receitas = await _Icontext.GetPerIdAsync(id);
+                return receitas;
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            }
 
         [HttpGet("{Years}/{Month}")]
 
-        public async Task<IEnumerable> GetPerMonth(string Years , string Month )
+        public async Task<IActionResult> GetPerMonth(string Years, string Month)
         {
-            var Data = _Icontext.GetPerMonth(Years, Month);
-            return await Data;
+            try
+            {
+                var Data = await _Icontext.GetPerMonth(Years, Month);
+                return Data;
+
+            }
+
+
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+
+            
+              
+           
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(Receitas receitas)
+        public async Task<IActionResult> PostAsync(CreateReceitasDto receitas)
         {
-
-            if (!ModelState.IsValid)
+            try
             {
-                BadRequest("Modelo inválido. Não é permitido campos em branco.");
-            }
-               
 
-            var receita = _Icontext.PostAsync(receitas);
-            return ( await receita);
+
+                if (!ModelState.IsValid)
+                {
+                    BadRequest("Modelo inválido. Não é permitido campos em branco.");
+                }
+
+
+                var receita =await _Icontext.PostAsync(receitas);
+                return receita;
+            }
+            catch (Exception )
+            {
+                return StatusCode(500);
+            }
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutAsync(Receitas receita, int id)
+        public async Task<IActionResult> PutAsync(UpdateReceitasDto receita, int id)
         {
-            
+            try
+            {
 
-            var receitas = _Icontext.PutAsync(receita, id);
-            return (await receitas);
+
+                var receitas = await _Icontext.PutAsync(receita, id);
+                return receitas;
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
 
-       
+
         [HttpDelete]
 
 
         public async Task<IActionResult> DeleteAsync(int id)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                BadRequest("Modelo inválido. Não é permitido campos em branco.");
+
+
+                if (!ModelState.IsValid)
+                {
+                    BadRequest("Modelo inválido. Não é permitido campos em branco.");
+                }
+                var receita = _Icontext.DeleteAsync(id);
+                return Ok(await receita);
             }
-            var receita = _Icontext.DeleteAsync(id);
-            return Ok(await receita);
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
 
     }
