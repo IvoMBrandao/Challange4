@@ -24,7 +24,7 @@ namespace Challange4.Repositorio
 
         public async Task<Despesas> GetPerIdAsync(int id)
         {
-            return await _context.Despesas.FirstOrDefaultAsync(Despesas => Despesas.Id == id);
+            return  await _context.Despesas.FirstOrDefaultAsync(Despesas => Despesas.Id == id);
         }
 
 
@@ -78,7 +78,7 @@ namespace Challange4.Repositorio
 
             if (despesas == null)
             {
-                throw new Exception($"Usuario para o ID:{id} não foi encontrado ");
+                return BadRequest($"Usuario para o ID:{id} não foi encontrado ");
             }
 
             if (Verificar != null)

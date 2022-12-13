@@ -7,16 +7,16 @@ namespace Challange4.Controllers
 {
     [ApiController]
     [Route("Despesas")]
-    public class DespesasController:ControllerBase
+    public class DespesasController : ControllerBase
     {
 
-            private readonly IDespesasRepositorio _Icontext;
+        private readonly IDespesasRepositorio _Icontext;
 
-            public DespesasController(IDespesasRepositorio icontext)
-            {
+        public DespesasController(IDespesasRepositorio icontext)
+        {
 
-                _Icontext = icontext;
-            }
+            _Icontext = icontext;
+        }
 
 
         [HttpGet]
@@ -33,37 +33,53 @@ namespace Challange4.Controllers
                 return Ok(await _Icontext.GetAllAsync());
 
             }
-            catch(Exception ex)
+            catch (Exception)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500);
             }
 
         }
 
 
-            [HttpGet("{id}")]
-            public async Task<IActionResult> GetPerIdAsync(int id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPerIdAsync(int id)
+        {
+            try
             {
-            if (!ModelState.IsValid)
-            {
-                BadRequest("Modelo inválido. Não é permitido campos em branco.");
-            }
-            var despesas = await _Icontext.GetPerIdAsync(id);
+
+                if (!ModelState.IsValid)
+                {
+                    BadRequest("Modelo inválido. Não é permitido campos em branco.");
+                }
+                var despesas = await _Icontext.GetPerIdAsync(id);
                 return Ok(despesas);
             }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+        }
 
         [HttpGet("{Years}/{Month}")]
 
-        public async Task<IEnumerable> GetPerMonth(string Years, string Month)
+        public async Task<IActionResult> GetPerMonth(string Years, string Month)
         {
-            var Data = _Icontext.GetPerMonth(Years, Month);
-            return await Data;
+            try
+            {
+                var Data = _Icontext.GetPerMonth(Years, Month);
+                return Ok(await Data);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
 
         [HttpPost]
-            public async Task<IActionResult> PostAsync(Despesas despesas)
+        public async Task<IActionResult> PostAsync(Despesas despesas)
+        {
+            try
             {
-
                 if (!ModelState.IsValid)
                 {
                     BadRequest("Modelo inválido. Não é permitido campos em branco.");
@@ -73,29 +89,49 @@ namespace Challange4.Controllers
                 var despesa = _Icontext.PostAsync(despesas);
                 return (await despesa);
             }
-
-            [HttpPut]
-            public async Task<IActionResult> PutAsync(Despesas despesa, int id)
+            catch (Exception)
             {
-               
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> PutAsync(Despesas despesa, int id)
+        {
+            try
+            {
+
                 var despesas = _Icontext.PutAsync(despesa, id);
                 return (await despesas);
+
             }
-
-
-            [HttpDelete]
-
-
-            public async Task<IActionResult> DeleteAsync(int id)
+            catch (Exception)
             {
-            if (!ModelState.IsValid)
-            {
-                BadRequest("Modelo inválido. Não é permitido campos em branco.");
+                return StatusCode(500);
             }
-            var despesa = _Icontext.DeleteAsync(id);
+        }
+
+        [HttpDelete]
+
+
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            try
+            {
+
+                if (!ModelState.IsValid)
+                {
+                    BadRequest("Modelo inválido. Não é permitido campos em branco.");
+                }
+                var despesa = _Icontext.DeleteAsync(id);
                 return Ok(await despesa);
             }
-
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
+
     }
+}
 

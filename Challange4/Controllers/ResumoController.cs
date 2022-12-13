@@ -21,8 +21,15 @@ namespace Challange4.Controllers
 
         public async Task<IActionResult> ResumoReceitaMes(string year,string Month)
         {
-            return await _context.ResumoMes(year, Month);
-           
+            try
+            {
+                return await _context.ResumoMes(year, Month);
+            }
+
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
 
       
