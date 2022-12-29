@@ -4,7 +4,6 @@ using Challange4.Data.Dtos;
 using Challange4.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections;
 
 
 namespace Challange4.Repositorio
@@ -21,21 +20,21 @@ namespace Challange4.Repositorio
             _mapper = mapper;
         }
 
-        public async Task<List<ReadReceitasDto>> GetAllAsync()
+        public async Task<List<ReadFinancaDto>> GetAllAsync()
         {
-            return   _mapper.Map<List<ReadReceitasDto>>(await _context.Receitas.ToListAsync());
+            return _mapper.Map<List<ReadFinancaDto>>(await _context.Receitas.ToListAsync());
         }
 
         public async Task<IActionResult> GetPerIdAsync(int id)
         {
             var receita = await _context.Receitas.FirstOrDefaultAsync(Receitas => Receitas.Id == id);
-            var receitaDto =  _mapper.Map<ReadReceitasDto>(receita);
+            var receitaDto =  _mapper.Map<ReadFinancaDto>(receita);
             
                 return  Ok(receitaDto);
         }
 
 
-        public async Task<IActionResult> PostAsync(CreateReceitasDto receitaDto)
+        public async Task<IActionResult> PostAsync(CreateFinancaDto receitaDto)
         {
             Receitas receita = _mapper.Map<Receitas>(receitaDto);
             var Verificar = (await GetAllAsync()).Where(x =>
@@ -51,8 +50,6 @@ namespace Challange4.Repositorio
 
             if (Verificar != null)
                 return BadRequest("Não é possível adicionar receitas iguais no mesmo mês.");
-
-
 
             await _context.Receitas.AddAsync(receita);
             await _context.SaveChangesAsync();
@@ -76,7 +73,7 @@ namespace Challange4.Repositorio
          
         }
 
-        public async Task<IActionResult> PutAsync([FromBody] UpdateReceitasDto receitaDto, int id)
+        public async Task<IActionResult> PutAsync([FromBody] UpdateFinancaDto receitaDto, int id)
         {
             Receitas receitas = await _context.Receitas.FirstOrDefaultAsync(Receitas => Receitas.Id == id);
 
@@ -107,21 +104,26 @@ namespace Challange4.Repositorio
 
         }
 
-        public async Task<Receitas> DeleteAsync(int id)
+        public async   Task<IActionResult> DeleteAsync(int id)
         {
             var receita = await _context.Receitas.FirstOrDefaultAsync(Receitas => Receitas.Id == id); ;
+
+            if(receita == null)
+            {
+                return NotFound();
+            }
 
             _context.Remove(receita);
             await _context.SaveChangesAsync();
           
-            return receita;
+            return NoContent();
         }
 
         public async Task<IActionResult> GetPerDescription(string description)
         {
             
             var descricao = await _context.Receitas.Where(x => x.Descricao.Contains(description)).ToListAsync();
-            var descricoesDto = _mapper.Map<List<ReadReceitasDto>>(descricao);
+            var descricoesDto = _mapper.Map<List<ReadFinancaDto>>(descricao);
 
 
             return Ok(descricoesDto);
@@ -135,7 +137,7 @@ namespace Challange4.Repositorio
             var Data =await _context.Receitas.Where(x => x.Data.Year.ToString().Equals(Years) &&
             x.Data.Month.ToString().Equals(Month)).ToListAsync(); 
 
-            var DataDto = _mapper.Map<List<ReadReceitasDto>>(Data);
+            var DataDto = _mapper.Map<List<ReadFinancaDto>>(Data);
             return Ok(DataDto);
 
          

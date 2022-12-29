@@ -1,5 +1,6 @@
 ﻿using Challange4.Models.Enum;
 using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata;
 
 namespace Challange4.Models
 {

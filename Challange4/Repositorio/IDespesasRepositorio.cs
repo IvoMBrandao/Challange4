@@ -1,4 +1,5 @@
-﻿using Challange4.Models;
+﻿using Challange4.Data.Dtos;
+using Challange4.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
 
@@ -8,12 +9,12 @@ namespace Challange4.Repositorio
 
     public interface IDespesasRepositorio
     {
-        Task<List<Despesas>> GetAllAsync();
-        Task<Despesas> GetPerIdAsync(int id);
-        Task<IActionResult> PostAsync(Despesas receitas);
-        Task<IActionResult> PutAsync(Despesas receita, int id);
-        Task<Despesas> DeleteAsync(int id);
-        Task<List<Despesas>> GetPerDescription(string description);
+        Task<List<ReadFinancaDto>> GetAllAsync();
+        Task<IActionResult> GetPerIdAsync(int id);
+        Task<IActionResult> PostAsync(CreateFinancaDto despesasDto);
+        Task<IActionResult> PutAsync(UpdateFinancaDto despesasDto, int id);
+        Task<IActionResult> DeleteAsync(int id);
+        Task<IActionResult> GetPerDescription(string description);
         Task<IEnumerable> GetPerMonth(string Years, string Month);
     }
 

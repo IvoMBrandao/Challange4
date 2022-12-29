@@ -22,6 +22,7 @@ builder.Services.AddScoped<IResumoRepositorio, ResumoRepositoio>();
 builder.Services.AddScoped<IReceitasRepositorio, ReceitasRepositorio>();
 builder.Services.AddScoped<IDespesasRepositorio, DespesasRepositorio>();
 
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

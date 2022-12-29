@@ -1,4 +1,6 @@
-﻿using Challange4.Models;
+﻿using AutoMapper;
+using Challange4.Data.Dtos;
+using Challange4.Models;
 using Challange4.Repositorio;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections;
@@ -11,11 +13,13 @@ namespace Challange4.Controllers
     {
 
         private readonly IDespesasRepositorio _Icontext;
+        private readonly IMapper _mapper;
 
-        public DespesasController(IDespesasRepositorio icontext)
+        public DespesasController(IDespesasRepositorio icontext, IMapper mapper)
         {
-
+            _mapper = mapper;
             _Icontext = icontext;
+
         }
 
 
@@ -28,7 +32,7 @@ namespace Challange4.Controllers
                 if (descricao != null)
                 {
                     var descri = await _Icontext.GetPerDescription(descricao);
-                    return Ok(descri);
+                    return descri;
                 }
                 return Ok(await _Icontext.GetAllAsync());
 
@@ -52,7 +56,7 @@ namespace Challange4.Controllers
                     BadRequest("Modelo inválido. Não é permitido campos em branco.");
                 }
                 var despesas = await _Icontext.GetPerIdAsync(id);
-                return Ok(despesas);
+                return despesas;
             }
             catch (Exception)
             {
@@ -76,7 +80,7 @@ namespace Challange4.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(Despesas despesas)
+        public async Task<IActionResult> PostAsync(CreateFinancaDto despesas)
         {
             try
             {
@@ -87,7 +91,7 @@ namespace Challange4.Controllers
 
 
                 var despesa = _Icontext.PostAsync(despesas);
-                return (await despesa);
+                return await despesa;
             }
             catch (Exception)
             {
@@ -96,7 +100,7 @@ namespace Challange4.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> PutAsync(Despesas despesa, int id)
+        public async Task<IActionResult> PutAsync(UpdateFinancaDto despesa, int id)
         {
             try
             {
@@ -124,7 +128,7 @@ namespace Challange4.Controllers
                     BadRequest("Modelo inválido. Não é permitido campos em branco.");
                 }
                 var despesa = _Icontext.DeleteAsync(id);
-                return Ok(await despesa);
+                return await despesa;
             }
             catch (Exception)
             {

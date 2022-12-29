@@ -15,14 +15,18 @@ namespace Challange4.Controllers
     public class ReceitasController : ControllerBase
     {
 
+
         private readonly IReceitasRepositorio _Icontext;
         private readonly IMapper _mapper;
 
-        public ReceitasController(IReceitasRepositorio icontext,IMapper mapper)
+        public ReceitasController(IReceitasRepositorio icontext, IMapper mapper)
         {
-            _mapper=mapper; 
+            _mapper = mapper;
             _Icontext = icontext;
+
         }
+
+
 
 
         [HttpGet]
@@ -50,10 +54,6 @@ namespace Challange4.Controllers
             {
                 return StatusCode(500);
             }
-    
-
-           
-
 
 
         }
@@ -71,13 +71,19 @@ namespace Challange4.Controllers
                 }
 
                 var receitas = await _Icontext.GetPerIdAsync(id);
+
+
                 return receitas;
+
             }
             catch (Exception)
             {
                 return StatusCode(500);
             }
-            }
+
+        }
+
+
 
         [HttpGet("{Years}/{Month}")]
 
@@ -85,24 +91,27 @@ namespace Challange4.Controllers
         {
             try
             {
-                var Data = await _Icontext.GetPerMonth(Years, Month);
-                return Data;
+
+                var Data = _Icontext.GetPerMonth(Years, Month);
+                return (await Data);
+
 
             }
-
 
             catch (Exception)
             {
                 return StatusCode(500);
+
             }
 
-            
-              
-           
+
+
+
+
         }
 
         [HttpPost]
-        public async Task<IActionResult> PostAsync(CreateReceitasDto receitas)
+        public async Task<IActionResult> PostAsync(CreateFinancaDto receitas)
         {
             try
             {
@@ -114,24 +123,33 @@ namespace Challange4.Controllers
                 }
 
 
-                var receita =await _Icontext.PostAsync(receitas);
-                return receita;
+                var receita = _Icontext.PostAsync(receitas);
+                return await receita;
             }
-            catch (Exception )
+           
+            catch (Exception)
+
             {
                 return StatusCode(500);
             }
+
         }
+          
+        
 
         [HttpPut]
-        public async Task<IActionResult> PutAsync(UpdateReceitasDto receita, int id)
+        public async Task<IActionResult> PutAsync(UpdateFinancaDto receita, int id)
         {
             try
             {
 
 
+
                 var receitas = await _Icontext.PutAsync(receita, id);
                 return receitas;
+
+                
+
             }
             catch (Exception)
             {
@@ -154,7 +172,11 @@ namespace Challange4.Controllers
                     BadRequest("Modelo inválido. Não é permitido campos em branco.");
                 }
                 var receita = _Icontext.DeleteAsync(id);
-                return Ok(await receita);
+                
+                    return (await receita);
+                
+                
+                
             }
             catch (Exception)
             {
